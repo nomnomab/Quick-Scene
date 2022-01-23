@@ -372,12 +372,10 @@ namespace Nomnom.QuickScene.Editor.CustomWindow {
 						if (_gameObjectWindow) {
 							CloseGameObjectWindow();
 						} else {
-							if (_sceneObjects.Length == 1) {
-								_gameObjectWindow = GameObjectWindow.Open(
-									_sceneObjects[0].Obj,
-									position.position + new Vector2(0, position.height),
-									new Vector2(300, 46));
-							}
+							_gameObjectWindow = GameObjectWindow.Open(
+								_sceneObjects.Select(s => s.Obj).ToArray(),
+								position.position + new Vector2(0, position.height),
+								new Vector2(300, 46));
 						}
 					} else if (e.button == 1) {
 						if (_sceneObjects.Length == 1) {
