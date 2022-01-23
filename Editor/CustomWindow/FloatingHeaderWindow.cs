@@ -193,13 +193,13 @@ namespace Nomnom.QuickScene.Editor.CustomWindow {
 				}
 
 				Texture texture;
-				if (component is MeshRenderer meshRenderer && meshRenderer.sharedMaterial) {
-					if (AssetPreview.IsLoadingAssetPreview(meshRenderer.sharedMaterial.GetInstanceID())) {
+				if (component is Renderer renderer && renderer.sharedMaterial) {
+					if (AssetPreview.IsLoadingAssetPreview(renderer.sharedMaterial.GetInstanceID())) {
 						canStop = false;
 						continue;
 					}
 
-					texture = AssetPreview.GetAssetPreview(meshRenderer.sharedMaterial);
+					texture = AssetPreview.GetAssetPreview(renderer.sharedMaterial);
 				} else {
 					texture = EditorGUIUtility.ObjectContent(component, component.GetType()).image;
 				}

@@ -9,13 +9,14 @@ namespace Nomnom.QuickScene.Editor.CustomWindow {
 	public class ComponentEditorWindow : QuickWindow<ComponentEditorWindow>, IDisposable {
 		private Object[] _components;
 		private UnityEditor.Editor _editor;
+		private MaterialEditor _materialEditor;
 		private Vector2 _scrollbar;
 
 		public static ComponentEditorWindow Open(Component[] components, Vector2 screenCoords, Vector2 size) {
 			Open(screenCoords, size);
 
 			Instance.Init(components);
-			
+
 			return Instance;
 		}
 
@@ -25,22 +26,36 @@ namespace Nomnom.QuickScene.Editor.CustomWindow {
 			}
 
 			DestroyImmediate(_editor);
-			
+
+			if (_materialEditor) {
+				_materialEditor.ResetTarget();
+			}
+
+			DestroyImmediate(_materialEditor);
+
 			_components = null;
 			_editor = null;
+			_materialEditor = null;
 		}
 
 		public override void Init() { }
 
 		public void Init(params Object[] components) {
 			_components = components;
-			
+
 			_editor = UnityEditor.Editor.CreateEditor(components);
+
+			// check if all materials are the same
+			if (components[0] is Renderer renderer) {
+				if (components.All(c => ((Renderer) c).sharedMaterial == renderer.sharedMaterial)) {
+					_materialEditor = (MaterialEditor) UnityEditor.Editor.CreateEditor(renderer.sharedMaterial);
+				}
+			}
 		}
 
 		public override void ShowAs(Rect rect, Vector2 size) {
 			position = new Rect(rect.position, size);
-			
+
 			ShowPopup();
 		}
 
@@ -62,9 +77,30 @@ namespace Nomnom.QuickScene.Editor.CustomWindow {
 			_scrollbar = EditorGUILayout.BeginScrollView(_scrollbar);
 			{
 				_editor.OnInspectorGUI();
+				_editor.Repaint();
 
 				if (e.type == EventType.Repaint) {
-					height += GUILayoutUtility.GetLastRect().height;
+					Rect mainRect = GUILayoutUtility.GetLastRect();
+					height += mainRect.height;
+				}
+
+				if (_materialEditor && _editor.target is Renderer renderer) {
+					GUILayout.BeginVertical();
+					_materialEditor.DrawHeader();
+				
+					if (_materialEditor.target != renderer.sharedMaterial) {
+						_materialEditor.ResetTarget();
+						DestroyImmediate(_materialEditor);
+				
+						_materialEditor = (MaterialEditor) UnityEditor.Editor.CreateEditor(renderer.sharedMaterial);
+					}
+				
+					bool isDefaultMaterial = !AssetDatabase.GetAssetPath(_materialEditor.target).StartsWith("Assets");
+					using (new EditorGUI.DisabledGroupScope(isDefaultMaterial)) {
+						_materialEditor.OnInspectorGUI();
+					}
+				
+					GUILayout.EndVertical();
 				}
 			}
 			EditorGUILayout.EndScrollView();
@@ -84,6 +120,32 @@ namespace Nomnom.QuickScene.Editor.CustomWindow {
 				// if the height has peaked a threshold, update
 				// update both min and max since Unity's position system sucks ass
 				minSize = maxSize = new Vector2(position.width, height);
+			}
+		}
+
+		public override void OnAfterGUI(Event e) {
+			if (_components[0] is Renderer oneRenderer) {
+				if (_components.All(c => ((Renderer) c).sharedMaterial.GetInstanceID() == oneRenderer.sharedMaterial.GetInstanceID())) {
+					if (!_materialEditor) {
+						_materialEditor = (MaterialEditor) UnityEditor.Editor.CreateEditor(oneRenderer.sharedMaterial);
+						
+						_editor.ResetTarget();
+						DestroyImmediate(_editor);
+						_editor = UnityEditor.Editor.CreateEditor(_components);
+						_editor.Repaint();
+					}
+				} else {
+					if (_materialEditor) {
+						_materialEditor.ResetTarget();
+						DestroyImmediate(_materialEditor);
+						_materialEditor = null;
+						
+						_editor.ResetTarget();
+						DestroyImmediate(_editor);
+						_editor = UnityEditor.Editor.CreateEditor(_components);
+						_editor.Repaint();
+					}
+				}
 			}
 		}
 
@@ -110,7 +172,7 @@ namespace Nomnom.QuickScene.Editor.CustomWindow {
 			Rect lastRect = GUILayoutUtility.GetLastRect();
 			Rect r = new Rect(lastRect.x, lastRect.y, lastRect.width, lastRect.height);
 			Rect rect1 = new Rect(r.x + 6f, r.y + 6f, 32f, 32f);
-			
+
 			GUIStyle tmpStyle = new GUIStyle(RouterEditor.BaseStyles.centerStyle);
 			tmpStyle.fixedHeight = 16;
 			GUI.Label(rect1, AssetPreview.GetMiniTypeThumbnail(editor.target.GetType()), tmpStyle);
