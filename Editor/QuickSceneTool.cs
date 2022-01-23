@@ -117,7 +117,6 @@ namespace Nomnom.QuickScene.Editor {
 				_input.Reset();
 				
 				e.Use();
-				sceneView.Focus();
 			}
 
 			Handles.ScaleHandle(Vector3.zero, point, Quaternion.identity, size);
