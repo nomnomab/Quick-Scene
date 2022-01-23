@@ -1,0 +1,18 @@
+{
+  "name": "com.nomnom.quick-scene",
+  "version": "1.0.0",
+  "displayName": "Quick Scene",
+  "description": "Description",
+  "unity": "2020.3",
+  "unityRelease": "20f1",
+  "licensesUrl": "https://choosealicense.com/licenses/mit/",
+  "dependencies": {},
+  "devDependencies": {},
+  "samples": [],
+  "author": {
+    "name": "Andrew Burke",
+    "email": "",
+    "url": ""
+  },
+  "type": "library"
+}
