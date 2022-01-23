@@ -1,18 +1,20 @@
 ﻿using System;
+using System.Linq;
 using Nomnom.QuickScene.Editor.Utility;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Nomnom.QuickScene.Editor.CustomWindow {
 	public class ComponentEditorWindow : QuickWindow<ComponentEditorWindow>, IDisposable {
-		private Component _component;
+		private Object[] _components;
 		private UnityEditor.Editor _editor;
 		private Vector2 _scrollbar;
 
-		public static ComponentEditorWindow Open(Component component, Vector2 screenCoords, Vector2 size) {
+		public static ComponentEditorWindow Open(Component[] components, Vector2 screenCoords, Vector2 size) {
 			Open(screenCoords, size);
 
-			Instance.Init(component);
+			Instance.Init(components);
 			
 			return Instance;
 		}
@@ -24,15 +26,16 @@ namespace Nomnom.QuickScene.Editor.CustomWindow {
 
 			DestroyImmediate(_editor);
 			
-			_component = null;
+			_components = null;
 			_editor = null;
 		}
 
 		public override void Init() { }
 
-		public void Init(Component component) {
-			_component = component;
-			_editor = UnityEditor.Editor.CreateEditor(component);
+		public void Init(params Object[] components) {
+			_components = components;
+			
+			_editor = UnityEditor.Editor.CreateEditor(components);
 		}
 
 		public override void ShowAs(Rect rect, Vector2 size) {
@@ -48,7 +51,7 @@ namespace Nomnom.QuickScene.Editor.CustomWindow {
 
 		public override bool OnPreGUI(Event e) {
 			// validate items
-			return _component;
+			return _components != null && _components.Any(c => c);
 		}
 
 		public override void OnDrawGUI(Event e) {

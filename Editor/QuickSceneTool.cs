@@ -90,7 +90,7 @@ namespace Nomnom.QuickScene.Editor {
 			}
 			
 			Vector2 screenCoords = GUIUtility.GUIToScreenPoint(e.mousePosition);
-			_floatingHeaderWindow = FloatingHeaderWindow.Open(newObject, screenCoords, Vector2.zero);
+			_floatingHeaderWindow = FloatingHeaderWindow.Open(Selection.gameObjects, screenCoords, Vector2.zero);
 			_floatingHeaderWindow.onClosed += OnFloatingWindowClosed;
 		}
 
