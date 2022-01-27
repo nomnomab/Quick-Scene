@@ -31,7 +31,24 @@ namespace Nomnom.QuickScene.Editor {
 			ObjectChangeEvents.changesPublished -= OnObjectChanged;
 			ObjectChangeEvents.changesPublished += OnObjectChanged;
 
+			EditorApplication.wantsToQuit -= OnEditorQuit;
+			EditorApplication.wantsToQuit += OnEditorQuit;
+
 			onSceneFrameDelay = null;
+		}
+
+		private static bool OnEditorQuit() {
+			if (_addWindow) {
+				_addWindow.OnClose();
+				_addWindow = null;
+			}
+			
+			if (_floatingHeaderWindow) {
+				_floatingHeaderWindow.OnClose();
+				_floatingHeaderWindow = null;
+			}
+
+			return true;
 		}
 
 		private static void OnObjectChanged(ref ObjectChangeEventStream stream) {
@@ -47,10 +64,10 @@ namespace Nomnom.QuickScene.Editor {
 		private void OnDestroy() {
 			SceneView.duringSceneGui += OnScene;
 		}
-		
+
 		private static void OnScene(SceneView sceneView) {
 			Event e = Event.current;
-			
+
 			// handle input
 			_input.Update(e);
 

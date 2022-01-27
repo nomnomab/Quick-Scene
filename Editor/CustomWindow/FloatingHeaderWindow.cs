@@ -553,7 +553,6 @@ namespace Nomnom.QuickScene.Editor.CustomWindow {
 
 			pos.position = screenPoint;
 			position = pos;
-			sceneView.Repaint();
 
 			if (_componentEditorWindow) {
 				pos = _componentEditorWindow.position;
@@ -565,7 +564,6 @@ namespace Nomnom.QuickScene.Editor.CustomWindow {
 					pos.position = screenPoint;
 
 					_componentEditorWindow.position = pos;
-					sceneView.Repaint();
 				}
 			}
 
@@ -579,9 +577,10 @@ namespace Nomnom.QuickScene.Editor.CustomWindow {
 					// pos.size = new Vector2(300, 46);
 
 					_gameObjectWindow.position = pos;
-					sceneView.Repaint();
 				}
 			}
+			
+			sceneView.Repaint();
 		}
 
 		private bool HasAnyObject() {
