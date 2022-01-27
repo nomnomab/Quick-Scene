@@ -2,7 +2,7 @@
 
 [![Unity Version](https://img.shields.io/badge/unity-2020.3%2B-blue.svg)](https://unity3d.com/get-unity/download)
 [![GitHub](https://img.shields.io/github/license/nomnomab/Quick-Scene.svg)](https://github.com/nomnomab/Quick-Scene/blob/master/LICENSE.md)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/keenanwoodall/Deform/compare)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/nomnomab/Quick-Scene/compare)
 [![openupm](https://img.shields.io/npm/v/com.nomnom.quick-scene?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.nomnom.quick-scene/)
 
 An alternative to the Unity inspector for quicker modifications without leaving the scene.
