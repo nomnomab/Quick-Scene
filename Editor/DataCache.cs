@@ -72,59 +72,65 @@ namespace Nomnom.QuickScene.Editor {
 				foreach (Type type in assembly.GetTypes()) {
 					MethodInfo[] methods = type.GetMethods(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
 					foreach (MethodInfo methodInfo in methods) {
-						MenuItem item = methodInfo.GetCustomAttribute<MenuItem>();
+						var items = methodInfo.GetCustomAttributes<MenuItem>();
 
-						if (item == null || !item.menuItem.TrimStart().StartsWith("GameObject")) {
+						if (items == null) {
 							continue;
 						}
 
-						string[] split = item.menuItem.Split('/');
-
-						INode lastNode = root;
-
-						sb.Clear();
-						for (int i = 1; i < split.Length - 1; i++) {
-							string cur = sb.ToString();
-							string str = split[i];
-							string tmp = $"{cur}/{str}";
-
-							if (!groups.TryGetValue(tmp, out INode curFolder)) {
-								SimpleNode folder = new SimpleNode(str, FolderIcon);
-								DefaultTree.Insert(lastNode.Id, folder);
-								groups[tmp] = curFolder = folder;
-							}
-
-							if (i > 0) {
-								sb.Append('/');
+						foreach (MenuItem menuItem in items) {
+							if (!menuItem.menuItem.TrimStart().StartsWith("GameObject")) {
+								continue;
 							}
 							
-							sb.Append(str);
+							string[] split = menuItem.menuItem.Split('/');
 
-							lastNode = curFolder;
-						}
+							INode lastNode = root;
 
-						string name = Path.GetFileName(item.menuItem);
-						Texture texture = EditorIcon.FromType(name);
+							sb.Clear();
+							for (int i = 1; i < split.Length - 1; i++) {
+								string cur = sb.ToString();
+								string str = split[i];
+								string tmp = $"{cur}/{str}";
 
-						if (!texture) {
-							texture = AddIcon;
-						}
+								if (!groups.TryGetValue(tmp, out INode curFolder)) {
+									SimpleNode folder = new SimpleNode(str, FolderIcon);
+									DefaultTree.Insert(lastNode.Id, folder);
+									groups[tmp] = curFolder = folder;
+								}
 
-						if (lastNode.Children.Any(n => n.Label.text == name)) {
-							continue;
-						}
+								if (i > 0) {
+									sb.Append('/');
+								}
+							
+								sb.Append(str);
+
+								lastNode = curFolder;
+							}
+
+							string name = Path.GetFileName(menuItem.menuItem);
+							Texture texture = EditorIcon.FromType(name);
+
+							if (!texture) {
+								texture = AddIcon;
+							}
+
+							if (lastNode.Children.Any(n => n.Label.text == name)) {
+								continue;
+							}
 						
-						DefaultTree.Insert(lastNode.Id, new MethodNode(() => {
-							EditorApplication.ExecuteMenuItem(item.menuItem);
-							GameObject selection = Selection.activeGameObject;
-							// NamingWindow.InUse = true;
+							DefaultTree.Insert(lastNode.Id, new MethodNode(() => {
+								EditorApplication.ExecuteMenuItem(menuItem.menuItem);
+								GameObject selection = Selection.activeGameObject;
+								// NamingWindow.InUse = true;
 							
-							if (selection) {
-								AddWindow.PlaceObject(selection);
-							}
+								if (selection) {
+									AddWindow.PlaceObject(selection);
+								}
 							
-							// QuickSceneTool.onSceneFrameDelay += () => NamingWindow.Init(true, true, true);
-						}, name, texture));
+								// QuickSceneTool.onSceneFrameDelay += () => NamingWindow.Init(true, true, true);
+							}, name, texture));
+						}
 					}
 				}
 			}

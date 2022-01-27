@@ -1,8 +1,8 @@
 {
   "name": "com.nomnom.quick-scene",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "Quick Scene",
-  "description": "Description",
+  "description": "An alternative to the Unity inspector for quicker modifications without leaving the scene.",
   "unity": "2020.3",
   "unityRelease": "20f1",
   "licensesUrl": "https://choosealicense.com/licenses/mit/",
