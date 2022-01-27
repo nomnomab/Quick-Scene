@@ -64,8 +64,12 @@ At the end of the toolbar is an Add Component button. This will show the native 
 
 ## FAQ
 Can I change my keybinds?
-- Yes! Search for `MainMenu/Editor/Quick Scene/Add - Pointer`, and `MainMenu/Editor/Quick Scene/Add - Origin` in the
+- Yes! Search for `MainMenu/Edit/Quick Scene/Add - Pointer`, and `MainMenu/Edit/Quick Scene/Add - Origin` in the
 shortcuts menu.
+
+I changed my keybinds, but they don't update!
+- If you change keybinds without a recompilation, you'll need to select `Edit/Quick Scene/Refresh Keybinds` to refresh
+them.
 
 If my editor crashes, why is there a random floating window?
 - This can happen due to the window not being closed properly. This can be fixed by resetting the Unity layout.
