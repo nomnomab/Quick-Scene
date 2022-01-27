@@ -1,6 +1,7 @@
 ﻿using System;
 using Nomnom.QuickScene.Editor.CustomWindow;
 using UnityEditor;
+using UnityEditor.ShortcutManagement;
 using UnityEngine;
 
 namespace Nomnom.QuickScene.Editor {
@@ -112,7 +113,7 @@ namespace Nomnom.QuickScene.Editor {
 		}
 
 		private static void HandleGizmo(Event e, SceneView sceneView) {
-			if (!_input.Ctrl || !_input.Shift || _addWindow) {
+			if (!_input.ShowOrigin && !_input.ShowPointer || _addWindow) {
 				return;
 			}
 			
@@ -127,6 +128,10 @@ namespace Nomnom.QuickScene.Editor {
 			if (_input.M0) {
 				// open window
 				Vector2 screenCoords = GUIUtility.GUIToScreenPoint(e.mousePosition);
+
+				if (_input.ShowOrigin) {
+					point = Vector3.zero;
+				}
 				
 				_addWindow = AddWindow.Open(new WindowState(point, _plane.Normal, _plane.Surface), screenCoords, new Vector2(250, 325));
 				_addWindow.onClosed += OnAddWindowClosed;
@@ -138,7 +143,7 @@ namespace Nomnom.QuickScene.Editor {
 
 			Handles.ScaleHandle(Vector3.zero, point, Quaternion.identity, size);
 
-			if (_input.Ctrl && _input.Shift && _input.Alt) {
+			if (_input.ShowOrigin) {
 				Handles.DrawDottedLine(point, Vector3.zero, 4);
 			}
 

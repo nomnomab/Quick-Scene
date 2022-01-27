@@ -36,9 +36,9 @@ openupm add com.nomnom.quick-scene
 ## Usage
 
 ### Scene placement
-When holding Ctrl+Shift in a scene, you can bring up the placement gizmo. This placement gizmo will dictate where the
+When holding Shift+A in a scene, you can bring up the placement gizmo. This placement gizmo will dictate where the
 new object will be placed. Once a point has been determined, left-click to bring up the Add Window.
-- Holding Ctrl+Shift+Alt will use origin placement instead.
+- Holding Shift+X will use origin placement instead.
 
 ![Add Window](Assets~/add_menu.jpg)
 
@@ -63,6 +63,10 @@ component's inspector window underneath the toolbar.
 At the end of the toolbar is an Add Component button. This will show the native Unity menu for the operation.
 
 ## FAQ
+Can I change my keybinds?
+- Yes! Search for `MainMenu/Editor/Quick Scene/Add - Pointer`, and `MainMenu/Editor/Quick Scene/Add - Origin` in the
+shortcuts menu.
+
 If my editor crashes, why is there a random floating window?
 - This can happen due to the window not being closed properly. This can be fixed by resetting the Unity layout.
 

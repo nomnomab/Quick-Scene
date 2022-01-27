@@ -1,6 +1,6 @@
 {
   "name": "com.nomnom.quick-scene",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "displayName": "Quick Scene",
   "description": "An alternative to the Unity inspector for quicker modifications without leaving the scene.",
   "unity": "2020.3",

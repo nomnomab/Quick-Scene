@@ -29,7 +29,7 @@ namespace Nomnom.QuickScene.Editor.CustomWindow {
 			
 			Instance._windowState = state;
 			Instance._searchField = new SearchField();
-			Instance._searchField.SetFocus();
+			// Instance._searchField.SetFocus();
 
 			return Instance;
 		}
